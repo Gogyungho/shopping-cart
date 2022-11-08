@@ -6,6 +6,8 @@ import { wrapper } from '../store/index';
 import { ThemeProvider } from 'styled-components';
 import getMediaQuery from '../util/common/getMediaQuery';
 import { theme } from '../styles/theme';
+import Head from 'next/head';
+import DefaultLayout from '../component/Layout/Default';
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -16,11 +18,18 @@ type AppPropsWithLayout = AppProps & {
 };
 
 const MyApp = ({ Component, pageProps }: AppPropsWithLayout): JSX.Element => {
+  const getLayout = Component.getLayout ?? ((page) => <DefaultLayout>{page}</DefaultLayout>);
+
   return (
-    <ThemeProvider theme={{ ...theme, ...getMediaQuery }}>
-      <GlobalStyle />
-      <Component {...pageProps} />
-    </ThemeProvider>
+    <>
+      <Head>
+        <title>29CM FE Test</title>
+      </Head>
+      <ThemeProvider theme={{ ...theme, ...getMediaQuery }}>
+        <GlobalStyle />
+        {getLayout(<Component {...pageProps} />)}
+      </ThemeProvider>
+    </>
   );
 };
 

@@ -15,7 +15,6 @@ export default class MyDocument extends Document {
             rel="stylesheet"
           />
           <link rel="icon" href="/favicon.ico" />
-          <title>29CM FE Test</title>
         </Head>
         <body>
           <Main />
