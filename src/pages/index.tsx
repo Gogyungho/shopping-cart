@@ -1,26 +1,10 @@
 import styled from 'styled-components';
-import { NextPageWithLayout } from '../pages/_app';
-import { breakpoints } from '../util/common/getMediaQuery';
+import { NextPageWithLayout } from '@pages/_app';
 
 const Home: NextPageWithLayout = () => {
-  return (
-    <Container>
-      <DefaultLayout>Hello</DefaultLayout>
-    </Container>
-  );
+  return <Container>Hello</Container>;
 };
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const DefaultLayout = styled.div`
-  width: 100%;
-  max-width: ${breakpoints.desktop}px;
-  height: 100%;
-  min-height: calc(var(--vh, 1vh) * 100);
-`;
+const Container = styled.div``;
 
 export default Home;

@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import Item from '@components/Item';
 import productItmes from '@api/productItems.json';
-import axios from 'axios';
 import { IItem } from '@components/Item/model/index';
 
 const ProductsPage = () => {
