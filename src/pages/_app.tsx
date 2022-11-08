@@ -8,6 +8,7 @@ import getMediaQuery from '@utils/common/getMediaQuery';
 import { theme } from '@styles/theme';
 import Head from 'next/head';
 import DefaultLayout from '@components/Layout/Default';
+import 'bootstrap/dist/css/bootstrap.css';
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;

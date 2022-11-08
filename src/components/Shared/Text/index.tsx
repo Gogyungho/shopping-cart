@@ -29,8 +29,6 @@ export interface IProps {
   wordBreak?: string;
   wordWrap?: string;
   textHide?: boolean;
-  textHideMultiline?: boolean;
-  textHidelineNum?: number;
 }
 
 const Text = (props: IProps) => {
@@ -72,6 +70,13 @@ export const Text18B = styled(Text)`
   letter-spacing: -0.4px;
   font-weight: bold;
   line-height: 26px;
+`;
+
+export const Text16B = styled(Text)`
+  font-size: 16px;
+  letter-spacing: -0.4px;
+  font-weight: bold;
+  line-height: 24px;
 `;
 
 export const Text16R = styled(Text)`

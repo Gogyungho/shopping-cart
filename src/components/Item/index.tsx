@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { IItem } from './model/index';
-import Image from 'next/image';
 import { Text18B, Text16R } from '@components/Shared/Text';
 import Tag from '@components/Shared/Tag';
 import Badge from '@components/Shared/Badge';
@@ -16,15 +15,21 @@ const Item = ({ item }: { item: IItem }) => {
             쿠폰사용가능
           </Badge>
         )}
-        <Image src={item.detail_image_url} alt="제품이미지" width={500} height={500} />
+        <img className="product-img" src={item.detail_image_url} alt="products image" />
       </ImageWrapper>
-      <ItemDetailWrapper>
-        <Text16R padding="0 0 4px 0">{item.item_name}</Text16R>
-        <Text18B padding="0 0 4px 0">{item.price}</Text18B>
-        <Tag padding="4px 8px" color={theme.black} backgroundColor={theme.grey10} borderRadius={4}>
-          무료배송
-        </Tag>
-      </ItemDetailWrapper>
+      <Content>
+        <ItemDetailWrapper>
+          <Text16R padding="0 0 4px 0">{item.item_name}</Text16R>
+          <Text18B padding="0 0 4px 0">{item.price.toLocaleString()}원</Text18B>
+          <Tag padding="4px 8px" color={theme.black} backgroundColor={theme.grey10} borderRadius={4}>
+            무료배송
+          </Tag>
+        </ItemDetailWrapper>
+        <CartBtn>
+          <Text18B className="cart-text">담기</Text18B>
+          <Text18B className="cart-text">빼기</Text18B>
+        </CartBtn>
+      </Content>
     </Container>
   );
 };
@@ -38,10 +43,24 @@ const Container = styled.div`
 
 const ImageWrapper = styled.div`
   position: relative;
+  .product-img {
+    width: 500px;
+    height: 500px;
+  }
 `;
 
-const ItemDetailWrapper = styled.div`
+const Content = styled.div`
+  display: flex;
+  justify-content: space-between;
   padding-top: 14px;
 `;
+const CartBtn = styled.div`
+  display: inline-block
+  .cart-text:hover{
+    color: ${theme.grey30};
+  }
+`;
+
+const ItemDetailWrapper = styled.div``;
 
 export default Item;

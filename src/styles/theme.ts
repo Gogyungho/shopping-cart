@@ -6,6 +6,7 @@ export const theme: Obj = {
   black: '#000000',
   grey10: '#F4F4F4',
   grey20: '#D4D4D4',
+  grey30: '#4b4a4a',
 };
 
 export const flexCenter = css`
