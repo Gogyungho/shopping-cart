@@ -1,11 +1,13 @@
 import { ReactElement, ReactNode } from 'react';
-import { GlobalStyle } from '../styles/GlobalStyle';
+import { GlobalStyle } from '@styles/GlobalStyle';
 import type { AppProps } from 'next/app';
 import { NextPage } from 'next';
-import { wrapper } from '../store/index';
+import { wrapper } from '@store/index';
 import { ThemeProvider } from 'styled-components';
-import getMediaQuery from '../util/common/getMediaQuery';
-import { theme } from '../styles/theme';
+import getMediaQuery from '@utils/common/getMediaQuery';
+import { theme } from '@styles/theme';
+import Head from 'next/head';
+import DefaultLayout from '@components/Layout/Default';
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -16,11 +18,18 @@ type AppPropsWithLayout = AppProps & {
 };
 
 const MyApp = ({ Component, pageProps }: AppPropsWithLayout): JSX.Element => {
+  const getLayout = Component.getLayout ?? ((page) => <DefaultLayout>{page}</DefaultLayout>);
+
   return (
-    <ThemeProvider theme={{ ...theme, ...getMediaQuery }}>
-      <GlobalStyle />
-      <Component {...pageProps} />
-    </ThemeProvider>
+    <>
+      <Head>
+        <title>29CM FE Test</title>
+      </Head>
+      <ThemeProvider theme={{ ...theme, ...getMediaQuery }}>
+        <GlobalStyle />
+        {getLayout(<Component {...pageProps} />)}
+      </ThemeProvider>
+    </>
   );
 };
 
