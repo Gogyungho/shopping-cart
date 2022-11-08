@@ -5,6 +5,7 @@ export const theme: Obj = {
   white: '#ffffff',
   black: '#000000',
   grey10: '#F4F4F4',
+  grey20: '#D4D4D4',
 };
 
 export const flexCenter = css`
