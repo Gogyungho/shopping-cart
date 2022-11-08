@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { Obj } from '../model/index';
+import { Obj } from '@model/index';
 
 export const theme: Obj = {
   width: '#fffff',

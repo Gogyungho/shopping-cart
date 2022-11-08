@@ -1,13 +1,13 @@
 import { ReactElement, ReactNode } from 'react';
-import { GlobalStyle } from '../styles/GlobalStyle';
+import { GlobalStyle } from '@styles/GlobalStyle';
 import type { AppProps } from 'next/app';
 import { NextPage } from 'next';
-import { wrapper } from '../store/index';
+import { wrapper } from '@store/index';
 import { ThemeProvider } from 'styled-components';
-import getMediaQuery from '../util/common/getMediaQuery';
-import { theme } from '../styles/theme';
+import getMediaQuery from '@utils/common/getMediaQuery';
+import { theme } from '@styles/theme';
 import Head from 'next/head';
-import DefaultLayout from '../component/Layout/Default';
+import DefaultLayout from '@components/Layout/Default';
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;

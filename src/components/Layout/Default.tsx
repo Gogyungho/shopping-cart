@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import styled from 'styled-components';
-import { breakpoints } from '../../util/common/getMediaQuery';
+import { breakpoints } from '@utils/common/getMediaQuery';
 
 const DefaultLayout = ({ children }: { children: ReactElement }) => {
   return (
