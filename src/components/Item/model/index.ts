@@ -1,3 +1,7 @@
+export interface IItemResponse {
+  productItems: IItem[];
+}
+
 export interface IItem {
   item_no: number;
   item_name: string;

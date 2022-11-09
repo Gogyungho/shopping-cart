@@ -58,6 +58,18 @@ const Container = styled.div<IProps>`
   text-align: ${(props) => (props.center ? 'center' : '')};
   word-break: ${(props) => props.wordBreak && props.wordBreak};
   word-wrap: ${(props) => props.wordWrap && props.wordWrap};
+
+  ${({ textHideMultiline, textHidelineNum }) => {
+    if (textHideMultiline) {
+      return css`
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: ${textHidelineNum ? textHidelineNum : 2};
+        -webkit-box-orient: vertical;
+      `;
+    }
+  }}
 `;
 
 export const Text24B = styled(Text)`
@@ -67,11 +79,25 @@ export const Text24B = styled(Text)`
   line-height: 38px;
 `;
 
+export const Text20B = styled(Text)`
+  font-size: 20px;
+  letter-spacing: -0.4px;
+  font-weight: bold;
+  line-height: 30px;
+`;
+
 export const Text18B = styled(Text)`
   font-size: 18px;
   letter-spacing: -0.4px;
   font-weight: bold;
   line-height: 26px;
+`;
+
+export const Text16B = styled(Text)`
+  font-size: 16px;
+  letter-spacing: -0.4px;
+  font-weight: bold;
+  line-height: 24px;
 `;
 
 export const Text16R = styled(Text)`
