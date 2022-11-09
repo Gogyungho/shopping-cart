@@ -7,27 +7,31 @@ import { AiOutlineUser } from 'react-icons/ai';
 import { FiHeart } from 'react-icons/fi';
 import Link from 'next/link';
 import { Text18B } from '@components/Shared/Text';
+import { useSelector } from 'react-redux';
+import { cartForm } from '@store/cart';
+
+const MENU_TAP = [
+  {
+    name: 'PRODUCTS',
+    link: '/products',
+  },
+  {
+    name: 'WOMEN',
+    link: '/products',
+  },
+  {
+    name: 'MAN',
+    link: '/products',
+  },
+  {
+    name: 'KIDS',
+    link: '/products',
+  },
+];
 
 const Header = () => {
   const scroll = useScrollCheck();
-  const MENU_TAP = [
-    {
-      name: 'PRODUCTS',
-      link: '/products',
-    },
-    {
-      name: 'WOMEN',
-      link: '/products',
-    },
-    {
-      name: 'MAN',
-      link: '/products',
-    },
-    {
-      name: 'KIDS',
-      link: '/products',
-    },
-  ];
+  const { cartLists } = useSelector(cartForm);
 
   return (
     <Container scroll={scroll}>
@@ -37,9 +41,11 @@ const Header = () => {
           <Wrapper>
             <Link href="/cart">
               <BsCart2 size={25} />
-              <CountWrapper>
-                <Count>{3}</Count>
-              </CountWrapper>
+              {cartLists.length > 0 && (
+                <CountWrapper>
+                  <Count>{cartLists.length}</Count>
+                </CountWrapper>
+              )}
             </Link>
           </Wrapper>
           <Wrapper>

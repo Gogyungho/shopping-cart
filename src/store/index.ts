@@ -1,15 +1,30 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
 
-import reducer from './modules';
+import rootReducer from './modules';
 
-const makeStore = (context: any) =>
+const isDev = process.env.NODE_ENV !== 'production';
+
+const makeConfigureStore = () =>
   configureStore({
-    reducer,
+    reducer: rootReducer,
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }).concat(),
-    devTools: process.env.NODE_ENV !== 'production',
+    devTools: isDev,
   });
 
-export const wrapper = createWrapper(makeStore, {
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: [
+    ...getDefaultMiddleware({
+      serializableCheck: false,
+    }),
+  ],
+  devTools: isDev,
+});
+
+export const wrapper = createWrapper(makeConfigureStore, {
   debug: process.env.NODE_ENV !== 'production',
 });
+
+export type AppState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

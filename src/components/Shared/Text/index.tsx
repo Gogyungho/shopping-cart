@@ -93,6 +93,13 @@ export const Text18B = styled(Text)`
   line-height: 26px;
 `;
 
+export const Text18R = styled(Text)`
+  font-size: 18px;
+  letter-spacing: -0.4px;
+  font-weight: normal;
+  line-height: 26px;
+`;
+
 export const Text16B = styled(Text)`
   font-size: 16px;
   letter-spacing: -0.4px;
