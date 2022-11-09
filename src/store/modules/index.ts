@@ -1,7 +1,8 @@
-import { combineReducers, AnyAction } from '@reduxjs/toolkit';
+import { combineReducers, AnyAction, CombinedState } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
+import cart from '../cart';
 
-const reducer = (state: any, action: AnyAction) => {
+const rootReducer = (state: any, action: AnyAction): CombinedState<any> => {
   if (action.type === HYDRATE) {
     return {
       ...state,
@@ -9,8 +10,8 @@ const reducer = (state: any, action: AnyAction) => {
     };
   }
   return combineReducers({
-    // 여기에 추가
+    cart,
   })(state, action);
 };
 
-export default reducer;
+export default rootReducer;
