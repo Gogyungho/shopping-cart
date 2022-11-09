@@ -40,9 +40,9 @@ const ProductsPage = () => {
 const Container = styled.div``;
 
 const Wrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  justify-items: center;
 `;
 
 export default ProductsPage;
