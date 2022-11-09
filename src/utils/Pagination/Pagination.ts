@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { IItemResponse } from '@components/Item/model/index';
+import { IItemResponse } from '@pages/products/model';
 
 export const pagination = (items: IItemResponse, pageNumber: number, pageSize: number) => {
   const startIndex = (pageNumber - 1) * pageSize;

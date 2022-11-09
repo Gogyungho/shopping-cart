@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { IItem } from './model/index';
+import { IItem } from '../../pages/products/model';
 import { Text18B, Text16R, Text20B } from '@components/Shared/Text';
 import Tag from '@components/Shared/Tag';
 import Badge from '@components/Shared/Badge';
@@ -78,7 +78,7 @@ const CartBtn = styled.div`
   right: 0;
   bottom: 0;
   .cart-text:hover {
-    color: ${theme.grey30};
+    color: ${theme.brandRed};
   }
 `;
 
