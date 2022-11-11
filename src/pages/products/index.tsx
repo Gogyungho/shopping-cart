@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import Item from '@components/Item';
-import productItmes from '@api/productItems.json';
+import productItmes from '@pages/api/productItems.json';
 import { IItem } from '@pages/products/model';
 import Pagination from '@components/Pagination';
 import { pagination } from '@utils/Pagination/Pagination';
