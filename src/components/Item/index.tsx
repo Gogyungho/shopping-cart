@@ -17,7 +17,7 @@ const Item = ({ item, addCartItem, checkedCart, removeCartItem }: IProps) => {
   return (
     <Container>
       <ImageWrapper>
-        {item.availableCoupon !== false && (
+        {item.availableCoupon ?? (
           <Badge left={0} top={6} backgroundColor={theme.black}>
             쿠폰사용가능
           </Badge>

@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { ICouponsResponse, ICoupons } from '@pages/cart/model';
 
 interface IProps {
   couponList: ICouponsResponse;
-  selectedCoupon: ICoupons;
   selectCouponHandler: (coupon: string) => void;
+  availableCouponItem: () => boolean | undefined;
 }
-const Coupon = ({ couponList, selectedCoupon, selectCouponHandler }: IProps) => {
+const Coupon = ({ couponList, selectCouponHandler, availableCouponItem }: IProps) => {
   return (
     <Container>
-      <SelectCoupon name="select" onChange={(e) => selectCouponHandler(e.target.value)}>
+      <SelectCoupon
+        disabled={!availableCouponItem()}
+        name="select"
+        onChange={(e) => selectCouponHandler(e.target.value)}
+      >
         {couponList.coupons.map((item: ICoupons, idx: number) => {
           return (
             <option key={idx} value={item.type}>
@@ -18,7 +22,7 @@ const Coupon = ({ couponList, selectedCoupon, selectCouponHandler }: IProps) => 
             </option>
           );
         })}
-        <option value="none">미적용</option>
+        <option value="none">쿠폰 미적용</option>
       </SelectCoupon>
     </Container>
   );

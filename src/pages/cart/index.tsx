@@ -12,11 +12,18 @@ import { ICoupons } from '@pages/cart/model';
 import { IItem } from '@pages/products/model';
 
 const CartPage = () => {
+  const noneCoupon: ICoupons = {
+    type: 'none',
+    title: '쿠폰 미적용',
+    discountAmount: 0,
+    discountRate: 0,
+  };
+
   const fetchCouponList = JSON.parse(JSON.stringify(couponData));
   const [selectedCoupon, setSelectedCoupon] = useState<ICoupons>(fetchCouponList.coupons[0]);
   const [productsArr, setProductsArr] = useState<IItem[]>([]);
-
   const { cartLists } = useSelector(cartForm);
+
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -30,11 +37,7 @@ const CartPage = () => {
   const selectCouponHandler = (coupon: string): void => {
     let filterdCoupon;
     if (coupon === 'none') {
-      filterdCoupon = {
-        type: 'none',
-        title: '미적용',
-        discountAmount: 0,
-      };
+      filterdCoupon = noneCoupon;
     } else {
       filterdCoupon = fetchCouponList.coupons.find((i: ICoupons) => i.type === coupon);
     }
@@ -77,6 +80,13 @@ const CartPage = () => {
   );
 
   const foundChckedItem = productsArr.filter((i: IItem) => i.checked);
+
+  const availableCouponItem = () => {
+    return foundChckedItem.some(
+      (i: IItem) => i.availableCoupon === undefined || (i.availableCoupon === undefined && i.availableCoupon === false)
+    );
+  };
+
   const getTotalPriceNotDiscount = useCallback((): number => {
     // 총 주문금액
     return foundChckedItem?.reduce((totalPrice, item) => {
@@ -126,8 +136,8 @@ const CartPage = () => {
               <Text18B padding="0 15px 2px 0">사용가능한 쿠폰</Text18B>
               <Coupon
                 couponList={fetchCouponList}
-                selectedCoupon={selectedCoupon}
                 selectCouponHandler={selectCouponHandler}
+                availableCouponItem={availableCouponItem}
               />
             </CouponWrapper>
           )}
@@ -137,6 +147,7 @@ const CartPage = () => {
             goToProducts={goToProducts}
             orderHandler={orderHandler}
             getTotalPriceNotDiscount={getTotalPriceNotDiscount}
+            availableCouponItem={availableCouponItem}
           />
         </FlexCol>
       ) : (

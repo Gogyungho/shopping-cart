@@ -11,6 +11,7 @@ interface IProps {
   goToProducts: () => void;
   orderHandler: () => void;
   getTotalPriceNotDiscount: () => number;
+  availableCouponItem: () => boolean;
 }
 const CartTotalPrice = ({
   fetchCouponList,
@@ -18,6 +19,7 @@ const CartTotalPrice = ({
   goToProducts,
   orderHandler,
   getTotalPriceNotDiscount,
+  availableCouponItem,
 }: IProps) => {
   return (
     <Container>
@@ -30,7 +32,7 @@ const CartTotalPrice = ({
         {fetchCouponList.coupons.length > 0 && (
           <FlexBetween padding="0 0 20px 0">
             <Text18R>쿠폰적용</Text18R>
-            <Text18R>{selectedCoupon.title}</Text18R>
+            <Text18R>{availableCouponItem() ? selectedCoupon.title : '쿠폰 사용불가'}</Text18R>
           </FlexBetween>
         )}
         <FlexBetween padding="0 0 20px 0">
