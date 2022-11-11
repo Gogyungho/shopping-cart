@@ -26,7 +26,7 @@ const Coupon = ({ couponList, selectedCoupon, selectCouponHandler }: IProps) => 
   );
 };
 
-const Container = styled.div``;
+const Container = styled.section``;
 
 const SelectCoupon = styled.select``;
 
