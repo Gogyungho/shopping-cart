@@ -11,9 +11,6 @@ const Coupon = ({ couponList, selectedCoupon, selectCouponHandler }: IProps) => 
   return (
     <Container>
       <SelectCoupon name="select" onChange={(e) => selectCouponHandler(e.target.value)}>
-        <option value="" disabled hidden>
-          {selectedCoupon.title}
-        </option>
         {couponList.coupons.map((item: ICoupons, idx: number) => {
           return (
             <option key={idx} value={item.type}>
@@ -21,6 +18,7 @@ const Coupon = ({ couponList, selectedCoupon, selectCouponHandler }: IProps) => 
             </option>
           );
         })}
+        <option value="none">미적용</option>
       </SelectCoupon>
     </Container>
   );

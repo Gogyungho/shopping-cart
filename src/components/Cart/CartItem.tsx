@@ -31,7 +31,7 @@ const CartItem = ({ item, onChange, quantityHandler }: IProps) => {
             <Text16B padding="0 0 5px 0">{item?.item_name}</Text16B>
             <FlexRow>
               <Text16B padding="0 5px 0 0">{(item?.price * item?.quantity)?.toLocaleString()}원</Text16B>
-              {item?.availableCoupon !== false && <Text16R color={theme.brandRed}>쿠폰가능</Text16R>}
+              {item?.availableCoupon !== false && <Text16R color={theme.brandRed}>쿠폰적용가능</Text16R>}
             </FlexRow>
           </div>
           <CountButton item={item} quantityHandler={quantityHandler} />

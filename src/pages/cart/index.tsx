@@ -28,38 +28,53 @@ const CartPage = () => {
   }, [cartLists]);
 
   const selectCouponHandler = (coupon: string): void => {
-    const filterdCoupon = fetchCouponList.coupons.find((i: ICoupons) => i.type === coupon);
+    let filterdCoupon;
+    if (coupon === 'none') {
+      filterdCoupon = {
+        type: 'none',
+        title: '미적용',
+        discountAmount: 0,
+      };
+    } else {
+      filterdCoupon = fetchCouponList.coupons.find((i: ICoupons) => i.type === coupon);
+    }
     setSelectedCoupon({ ...filterdCoupon });
   };
 
-  const selectedCartItemHandler = (id: number) => {
-    // 제품 체크박스 핸들러
-    const changeChecked = productsArr.map((product: IItem) => {
-      if (id === product.item_no) {
-        return { ...product, checked: !product.checked };
-      } else return product;
-    });
-    setProductsArr(changeChecked);
-  };
+  const selectedCartItemHandler = useCallback(
+    (id: number) => {
+      // 제품 체크박스 핸들러
+      const changeChecked = productsArr.map((product: IItem) => {
+        if (id === product.item_no) {
+          return { ...product, checked: !product.checked };
+        } else return product;
+      });
+      setProductsArr(changeChecked);
+    },
+    [productsArr]
+  );
 
-  const quantityHandler = (type: string, id: number) => {
-    // 제품 수량 핸들러
-    if (type === 'plus') {
-      const addQty = productsArr.map((product) => {
-        if (id === product.item_no && product?.quantity! < 9) {
-          return { ...product, quantity: product?.quantity! + 1 };
-        } else return product;
-      });
-      setProductsArr(addQty);
-    } else {
-      const substractQty = productsArr.map((product) => {
-        if (id === product.item_no && product?.quantity! > 1) {
-          return { ...product, quantity: product?.quantity! - 1 };
-        } else return product;
-      });
-      setProductsArr(substractQty);
-    }
-  };
+  const quantityHandler = useCallback(
+    (type: string, id: number) => {
+      // 제품 수량 핸들러
+      if (type === 'plus') {
+        const addQty = productsArr.map((product) => {
+          if (id === product.item_no && product?.quantity! < 9) {
+            return { ...product, quantity: product?.quantity! + 1 };
+          } else return product;
+        });
+        setProductsArr(addQty);
+      } else {
+        const substractQty = productsArr.map((product) => {
+          if (id === product.item_no && product?.quantity! > 1) {
+            return { ...product, quantity: product?.quantity! - 1 };
+          } else return product;
+        });
+        setProductsArr(substractQty);
+      }
+    },
+    [productsArr]
+  );
 
   const foundChckedItem = productsArr.filter((i: IItem) => i.checked);
   const getTotalPriceNotDiscount = useCallback((): number => {
@@ -71,7 +86,7 @@ const CartPage = () => {
 
   const getTotalPriceWithDiscount = useCallback(() => {
     // 총 결제금액
-  }, [productsArr]);
+  }, [productsArr, selectedCoupon]);
 
   const goToProducts = () => {
     router.push('/products');
