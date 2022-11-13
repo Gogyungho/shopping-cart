@@ -38,8 +38,7 @@ Open [http://localhost:3001](http://localhost:3001) with your browser to see the
 
 - 메인 라이브러리 & 프레임워크: React, Next.js
 - 메인 언어 및 문법: Typescript, Javascript ES6+, JSX
-- 상태 관리: redux, reduc-toolkit, redux-persist
-- 스타일 : styled-components
+- 상태 관리: redux, redux-toolkit, redux-persist
 - UI Library: styled-components, bootstrap, react-icons
 - 기타: git, eslint, prettier, lodash
 
