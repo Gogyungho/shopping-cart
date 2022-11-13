@@ -1,2 +1,2 @@
 export { default as CartItem } from './CartItem';
-export { default as Coupon } from './Coupon';
+export { default as CartTotalPriceWithCoupons } from './CartTotalPriceWithCoupons';

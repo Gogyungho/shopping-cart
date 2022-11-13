@@ -1,101 +1,133 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
-import { theme, FlexCol, FlexBetween, FlexCenter } from '@styles/theme';
-import { Text24B, Text18B, Text18R } from '@components/Shared/Text';
+import { theme, FlexCol, FlexBetween } from '@styles/theme';
+import { Text24B, Text18B } from '@components/Shared/Text';
 import { Button } from '@components/Shared/Button';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
-import { cartForm } from '@store/cart';
-import { CartItem, Coupon } from '@components/Cart';
-import couponData from '@api/coupon.json';
+import { useSelector, useDispatch } from 'react-redux';
+import { cartForm, INIT_CART_LISTS } from '@store/cart';
+import { CartItem, CartTotalPriceWithCoupons } from '@components/Cart';
+import couponData from '@pages/api/coupon.json';
 import { ICoupons } from '@pages/cart/model';
-
-const CART_ITEM_LIST = [
-  {
-    item_no: 122997,
-    item_name: '스탠리 클래식 런치박스',
-    detail_image_url: 'https://img.29cm.co.kr/contents/itemDetail/201702/cut4_320170216150109.jpg?width=500',
-    price: 75000,
-    score: 200,
-  },
-  {
-    item_no: 768848,
-    item_name: '[STANLEY] GO CERAMIVAC 진공 텀블러/보틀 473ml',
-    detail_image_url:
-      'https://img.29cm.co.kr/next-product/2020/11/23/18a5303591f446e79b806945347e7473_20201123143211.jpg?width=500',
-    price: 42000,
-    score: 300,
-  },
-];
+import { IItem } from '@pages/products/model';
 
 const CartPage = () => {
   const fetchCouponList = JSON.parse(JSON.stringify(couponData));
-  const [selectedCoupon, setSelectedCoupon] = useState<ICoupons>(fetchCouponList.coupons[0]);
-
+  const [productsArr, setProductsArr] = useState<IItem[]>([]);
   const { cartLists } = useSelector(cartForm);
+
   const router = useRouter();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const arr = cartLists.map((i: IItem) => {
+      return { ...i, quantity: 1, checked: false };
+    });
+    setProductsArr(arr);
+  }, [cartLists]);
+
+  const selectedCartItemHandler = useCallback(
+    (id: number) => {
+      // 제품 체크박스 핸들러
+      const changeChecked = productsArr.map((product: IItem) => {
+        if (id === product.item_no) {
+          return { ...product, checked: !product.checked };
+        } else return product;
+      });
+      setProductsArr(changeChecked);
+    },
+    [productsArr]
+  );
+
+  const quantityHandler = useCallback(
+    (type: string, id: number) => {
+      // 제품 수량 핸들러
+      if (type === 'plus') {
+        const addQty = productsArr.map((product) => {
+          if (id === product.item_no && product?.quantity! < 9) {
+            return { ...product, quantity: product?.quantity! + 1 };
+          } else return product;
+        });
+        setProductsArr(addQty);
+      } else {
+        const substractQty = productsArr.map((product) => {
+          if (id === product.item_no && product?.quantity! > 1) {
+            return { ...product, quantity: product?.quantity! - 1 };
+          } else return product;
+        });
+        setProductsArr(substractQty);
+      }
+    },
+    [productsArr]
+  );
+
+  const foundChckedItem = productsArr.filter((i: IItem) => i.checked);
+
+  const availableCouponItem = (): boolean => {
+    return foundChckedItem.some(
+      (i: IItem) => i.availableCoupon === undefined || (i.availableCoupon === undefined && i.availableCoupon === false)
+    );
+  };
+
+  const getTotalPrice = useCallback(() => {
+    // 할인 금액과 총 주문 금액
+    const totalPriceObj = {
+      totalPrice: 0,
+      rateDiscountPrice: 0,
+      amountDiscountPrice: 0,
+    };
+    const discountRate = fetchCouponList.coupons.find((value: ICoupons) => value.type === 'rate')?.discountRate;
+    const discountAmount = fetchCouponList.coupons.find((value: ICoupons) => value.type === 'amount')?.discountAmount;
+    foundChckedItem.map((item: IItem) => {
+      totalPriceObj.totalPrice += item.price * item.quantity;
+      if (item.availableCoupon !== false) {
+        totalPriceObj.rateDiscountPrice += Math.floor((item.price * item.quantity * discountRate) / 100);
+        totalPriceObj.amountDiscountPrice = discountAmount;
+      }
+    });
+    return totalPriceObj;
+  }, [foundChckedItem]);
+
   const goToProducts = () => {
     router.push('/products');
   };
+  const orderHandler = () => {
+    if (foundChckedItem.length) {
+      alert('주문을 완료했습니다.');
+    } else {
+      alert('상품을 선택해 주세요.');
+    }
+  };
 
-  const selectCouponHandler = (coupon: string): void => {
-    const filterdCoupon = fetchCouponList.coupons.find((i: ICoupons) => i.type === coupon);
-    setSelectedCoupon({ ...filterdCoupon });
+  const removeAllCartItems = () => {
+    dispatch(INIT_CART_LISTS());
   };
 
   return (
     <Container>
-      {cartLists.length === 0 ? (
+      <FlexBetween padding="0 0 20px 0">
+        <Text24B>장바구니</Text24B>
+        <Text18B onClick={removeAllCartItems} pointer>
+          전체삭제
+        </Text18B>
+      </FlexBetween>
+      {cartLists.length > 0 ? (
         <FlexCol width="100%">
           <CartListWrapper>
             <Text18B padding="0 0 10px 20px">상품정보</Text18B>
-            {CART_ITEM_LIST.map((item, idx) => {
-              return <CartItem key={idx} item={item} />;
+            {productsArr.map((item, idx) => {
+              return (
+                <CartItem key={idx} item={item} onChange={selectedCartItemHandler} quantityHandler={quantityHandler} />
+              );
             })}
           </CartListWrapper>
-          {fetchCouponList.coupons.length > 0 && (
-            <CouponWrapper>
-              <Text18B padding="0 15px 2px 0">사용가능한 쿠폰</Text18B>
-              <Coupon
-                couponList={fetchCouponList}
-                selectedCoupon={selectedCoupon}
-                selectCouponHandler={selectCouponHandler}
-              />
-            </CouponWrapper>
-          )}
-          <TotalPriceWrapper>
-            <Text18B padding="0 0 30px 0">결제정보</Text18B>
-            <FlexBetween padding="0 0 20px 0">
-              <Text18R>총 주문금액</Text18R>
-              <Text18R>24,000원</Text18R>
-            </FlexBetween>
-            {fetchCouponList.coupons.length > 0 && (
-              <FlexBetween padding="0 0 20px 0">
-                <Text18R>쿠폰적용</Text18R>
-                <Text18R>{selectedCoupon.title}</Text18R>
-              </FlexBetween>
-            )}
-            <FlexBetween padding="0 0 20px 0">
-              <Text18B>총 결제금액</Text18B>
-              <Text18B>124,000원</Text18B>
-            </FlexBetween>
-          </TotalPriceWrapper>
-          <FlexCenter padding="30px 0 40px 0">
-            <Button
-              className="cart-btn"
-              onClick={goToProducts}
-              width="235px"
-              margin="0 20px 0 0"
-              padding="10px 0"
-              pointer
-              border
-            >
-              CONTINUE SHOPPING
-            </Button>
-            <Button className="cart-btn" onClick={goToProducts} width="235px" padding="10px 0" pointer border>
-              ORDER
-            </Button>
-          </FlexCenter>
+          <CartTotalPriceWithCoupons
+            fetchCouponList={fetchCouponList}
+            goToProducts={goToProducts}
+            orderHandler={orderHandler}
+            getTotalPrice={getTotalPrice}
+            availableCouponItem={availableCouponItem}
+          />
         </FlexCol>
       ) : (
         <EmptyCartWrapper>
@@ -122,6 +154,7 @@ const Container = styled.div`
   margin-top: 30px;
   display: flex;
   align-items: center;
+  flex-direction: column;
   .cart-btn:hover {
     color: ${theme.brandRed};
   }
@@ -145,17 +178,6 @@ const EmptyCartWrapper = styled.section`
   display: flex;
   align-items: center;
   flex-direction: column;
-`;
-
-const TotalPriceWrapper = styled.section`
-  padding: 30px 40px;
-  border-top: 3px solid ${theme.black};
-  border-bottom: 1px solid ${theme.black};
-`;
-
-const CouponWrapper = styled.section`
-  margin-bottom: 50px;
-  display: flex;
 `;
 
 export default CartPage;

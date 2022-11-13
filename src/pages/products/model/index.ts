@@ -8,5 +8,7 @@ export interface IItem {
   detail_image_url: string;
   price: number;
   score: number;
-  availableCoupon?: boolean;
+  availableCoupon: boolean;
+  quantity: number;
+  checked: boolean;
 }

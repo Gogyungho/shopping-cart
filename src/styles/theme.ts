@@ -65,3 +65,11 @@ export const FlexBetween = styled.div<{
   height: ${({ height }) => height && height};
   cursor: ${(props) => (props.pointer ? 'pointer' : 'static')};
 `;
+
+export const FlexColStart = styled.div<{ margin?: string; padding?: string; width?: string }>`
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  padding: ${({ padding }) => padding && padding};
+  margin: ${({ margin }) => margin && margin};
+`;

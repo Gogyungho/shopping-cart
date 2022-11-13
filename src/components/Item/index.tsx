@@ -6,11 +6,18 @@ import Tag from '@components/Shared/Tag';
 import Badge from '@components/Shared/Badge';
 import { theme } from '@styles/theme';
 
-const Item = ({ item }: { item: IItem }) => {
+interface IProps {
+  item: IItem;
+  addCartItem: (item: IItem) => void;
+  removeCartItem: (item: IItem) => void;
+  checkedCart: (item: IItem) => boolean;
+}
+
+const Item = ({ item, addCartItem, checkedCart, removeCartItem }: IProps) => {
   return (
     <Container>
       <ImageWrapper>
-        {item.availableCoupon !== false && (
+        {item.availableCoupon ?? (
           <Badge left={0} top={6} backgroundColor={theme.black}>
             쿠폰사용가능
           </Badge>
@@ -27,9 +34,12 @@ const Item = ({ item }: { item: IItem }) => {
             무료배송
           </Tag>
         </ItemDetailWrapper>
-        <CartBtn>
-          <Text20B className="cart-text">담기</Text20B>
-          {/* <Text20B className="cart-text">빼기</Text20B> */}
+        <CartBtn onClick={checkedCart(item) ? () => removeCartItem(item) : () => addCartItem(item)}>
+          {checkedCart(item) ? (
+            <Text20B className="cart-text">빼기</Text20B>
+          ) : (
+            <Text20B className="cart-text">담기</Text20B>
+          )}
         </CartBtn>
       </Content>
     </Container>
@@ -84,4 +94,4 @@ const CartBtn = styled.div`
 
 const ItemDetailWrapper = styled.div``;
 
-export default Item;
+export default React.memo(Item);
