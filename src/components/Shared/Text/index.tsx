@@ -114,6 +114,13 @@ export const Text16R = styled(Text)`
   line-height: 24px;
 `;
 
+export const Text14R = styled(Text)`
+  font-size: 14px;
+  letter-spacing: -0.4px;
+  font-weight: normal;
+  line-height: 22px;
+`;
+
 export const Text10B = styled(Text)`
   font-size: 10px;
   letter-spacing: -0.4px;
