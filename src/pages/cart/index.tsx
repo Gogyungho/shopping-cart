@@ -6,21 +6,13 @@ import { Button } from '@components/Shared/Button';
 import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
 import { cartForm, INIT_CART_LISTS } from '@store/cart';
-import { CartItem, Coupon, CartTotalPrice } from '@components/Cart';
+import { CartItem, CartTotalPriceWithCoupons } from '@components/Cart';
 import couponData from '@pages/api/coupon.json';
 import { ICoupons } from '@pages/cart/model';
 import { IItem } from '@pages/products/model';
 
 const CartPage = () => {
-  const noneCoupon: ICoupons = {
-    type: 'none',
-    title: '쿠폰 미적용',
-    discountAmount: 0,
-    discountRate: 0,
-  };
-
   const fetchCouponList = JSON.parse(JSON.stringify(couponData));
-  const [selectedCoupon, setSelectedCoupon] = useState<ICoupons>(fetchCouponList.coupons[0]);
   const [productsArr, setProductsArr] = useState<IItem[]>([]);
   const { cartLists } = useSelector(cartForm);
 
@@ -33,16 +25,6 @@ const CartPage = () => {
     });
     setProductsArr(arr);
   }, [cartLists]);
-
-  const selectCouponHandler = (coupon: string): void => {
-    let filterdCoupon;
-    if (coupon === 'none') {
-      filterdCoupon = noneCoupon;
-    } else {
-      filterdCoupon = fetchCouponList.coupons.find((i: ICoupons) => i.type === coupon);
-    }
-    setSelectedCoupon({ ...filterdCoupon });
-  };
 
   const selectedCartItemHandler = useCallback(
     (id: number) => {
@@ -81,22 +63,30 @@ const CartPage = () => {
 
   const foundChckedItem = productsArr.filter((i: IItem) => i.checked);
 
-  const availableCouponItem = () => {
+  const availableCouponItem = (): boolean => {
     return foundChckedItem.some(
       (i: IItem) => i.availableCoupon === undefined || (i.availableCoupon === undefined && i.availableCoupon === false)
     );
   };
 
-  const getTotalPriceNotDiscount = useCallback((): number => {
-    // 총 주문금액
-    return foundChckedItem?.reduce((totalPrice, item) => {
-      return totalPrice + item.price * item.quantity;
-    }, 0);
-  }, [productsArr]);
-
-  const getTotalPriceWithDiscount = useCallback(() => {
-    // 총 결제금액
-  }, [productsArr, selectedCoupon]);
+  const getTotalPrice = useCallback(() => {
+    // 할인 금액과 총 주문 금액
+    const totalPriceObj = {
+      totalPrice: 0,
+      rateDiscountPrice: 0,
+      amountDiscountPrice: 0,
+    };
+    const discountRate = fetchCouponList.coupons.find((value: ICoupons) => value.type === 'rate')?.discountRate;
+    const discountAmount = fetchCouponList.coupons.find((value: ICoupons) => value.type === 'amount')?.discountAmount;
+    foundChckedItem.map((item: IItem) => {
+      totalPriceObj.totalPrice += item.price * item.quantity;
+      if (item.availableCoupon !== false) {
+        totalPriceObj.rateDiscountPrice += Math.floor((item.price * item.quantity * discountRate) / 100);
+        totalPriceObj.amountDiscountPrice = discountAmount;
+      }
+    });
+    return totalPriceObj;
+  }, [foundChckedItem]);
 
   const goToProducts = () => {
     router.push('/products');
@@ -131,22 +121,11 @@ const CartPage = () => {
               );
             })}
           </CartListWrapper>
-          {fetchCouponList.coupons.length > 0 && (
-            <CouponWrapper>
-              <Text18B padding="0 15px 2px 0">사용가능한 쿠폰</Text18B>
-              <Coupon
-                couponList={fetchCouponList}
-                selectCouponHandler={selectCouponHandler}
-                availableCouponItem={availableCouponItem}
-              />
-            </CouponWrapper>
-          )}
-          <CartTotalPrice
+          <CartTotalPriceWithCoupons
             fetchCouponList={fetchCouponList}
-            selectedCoupon={selectedCoupon}
             goToProducts={goToProducts}
             orderHandler={orderHandler}
-            getTotalPriceNotDiscount={getTotalPriceNotDiscount}
+            getTotalPrice={getTotalPrice}
             availableCouponItem={availableCouponItem}
           />
         </FlexCol>
@@ -199,11 +178,6 @@ const EmptyCartWrapper = styled.section`
   display: flex;
   align-items: center;
   flex-direction: column;
-`;
-
-const CouponWrapper = styled.section`
-  margin-bottom: 50px;
-  display: flex;
 `;
 
 export default CartPage;
