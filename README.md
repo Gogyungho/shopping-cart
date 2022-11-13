@@ -1,34 +1,56 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+## Package Manager
 
-First, run the development server:
+yarn 사용
 
-```bash
-npm run dev
-# or
-yarn dev
+```javascript
+yarn install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Project Start
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```bash
+yarn dev
+```
+Open [http://localhost:3001](http://localhost:3001) with your browser to see the result.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## Directory Structure
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```
+└── src
+    ├── components
+    ├── hooks
+    ├── model
+    ├── pages
+    ├── store
+    ├── styles
+    └── utils
+```
+- components : 공용컴포넌트들을 작성하는 폴더
+- hooks : 공통 혹은 페이지별로 사용되는 커스텀 훅 폴더
+- model : 공통으로 사용되는 model 정의
+- pages : 라우팅되는 컴포넌트들 정의 (camelCase사용)
+- store : reducer module, module 통합, store 생성 및 wrapper 생성
+- styles : globelStyle 과 공통으로 사용되는 스타일 theme에 정의
+- utils : 비지니스 로직을 제외한 공통 로직들만 모아두는 폴더
 
-## Learn More
+## Thchnical Skills
 
-To learn more about Next.js, take a look at the following resources:
+- 메인 라이브러리 & 프레임워크: React, Next.js
+- 메인 언어 및 문법: Typescript, Javascript ES6+, JSX
+- 상태 관리: redux, reduc-toolkit, redux-persist
+- 스타일 : styled-components
+- UI Library: styled-components, bootstrap, react-icons
+- 기타: git, eslint, prettier, lodash
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## prettier
+```js
+{
+  "trailingComma": "es5", // 객체, 배열을 사용할때 마지막줄 쉼표
+  "tabWidth": 2, // 탭 넓이 2칸
+  "printWidth": 120, // 한줄길이 120
+  "semi": true, // 세미콜론 사용
+  "singleQuote": true, // 싱글쿼터 사용
+  "bracketSpacing": true // 객체 리터럴에서 괄호에 공백 삽입 여부
+}
+```
