@@ -119,4 +119,4 @@ const CouponWrapper = styled.section`
 
 const SelectCoupon = styled.select``;
 
-export default CartTotalPriceWithCoupons;
+export default React.memo(CartTotalPriceWithCoupons);
