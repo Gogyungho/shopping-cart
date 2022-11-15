@@ -27,10 +27,11 @@ const CartPage = () => {
   }, [cartLists]);
 
   const selectedCartItemHandler = useCallback(
-    (id: number) => {
+    (e: React.ChangeEvent<HTMLInputElement>) => {
       // 제품 체크박스 핸들러
+      const value = Number(e.target.value);
       const changeChecked = productsArr.map((product: IItem) => {
-        if (id === product.item_no) {
+        if (value === product.item_no) {
           return { ...product, checked: !product.checked };
         } else return product;
       });

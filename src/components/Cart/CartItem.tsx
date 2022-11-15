@@ -7,7 +7,7 @@ import { theme } from '@styles/theme';
 
 interface IProps {
   item: IItem;
-  onChange: (num: number) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   quantityHandler: (type: string, id: number) => void;
 }
 
@@ -20,7 +20,7 @@ const CartItem = ({ item, onChange, quantityHandler }: IProps) => {
             className="form-check-input"
             type="checkbox"
             value={item?.item_no}
-            onChange={(e) => onChange(Number(e.target.value))}
+            onChange={onChange}
             id="flexCheckDefault"
           />
           <label className="form-check-label" htmlFor="flexCheckDefault"></label>

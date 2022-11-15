@@ -32,12 +32,12 @@ const CartTotalPriceWithCoupons = ({
   }, [getTotalPriceObj]);
 
   const selectCouponHandler = useCallback(
-    (value: string): void => {
-      if (value === 'rate') {
+    (e: React.ChangeEvent<HTMLSelectElement>): void => {
+      if (e.target.value === 'rate') {
         setSelectedDiscountPrice(getTotalPriceObj.rateDiscountPrice);
-      } else if (value === 'amount') {
+      } else if (e.target.value === 'amount') {
         setSelectedDiscountPrice(getTotalPriceObj.amountDiscountPrice);
-      } else if (value === 'none') {
+      } else if (e.target.value === 'none') {
         setSelectedDiscountPrice(0);
       }
     },
@@ -53,7 +53,7 @@ const CartTotalPriceWithCoupons = ({
             disabled={!availableCouponsItem}
             name="select"
             defaultValue="none"
-            onChange={(e) => selectCouponHandler(e.target.value)}
+            onChange={selectCouponHandler}
           >
             {fetchCouponList.coupons.map((item: ICoupons, idx: number) => {
               return (
