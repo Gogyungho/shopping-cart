@@ -15,6 +15,7 @@ const ProductsPage = () => {
   const pageSize = 5;
   const fetchProductItems = JSON.parse(JSON.stringify(productItmes));
 
+  const sortProductsItems = fetchProductItems.productItems.sort((a: IItem, b: IItem) => b.score - a.score);
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     window.scrollTo(0, 0);
@@ -38,7 +39,8 @@ const ProductsPage = () => {
     dispatch(DELETE_CART_ITEM(item.item_no));
   };
 
-  const paginationProducts = pagination(fetchProductItems.productItems, currentPage, pageSize);
+  const paginationProducts = pagination(sortProductsItems, currentPage, pageSize);
+
   return (
     <Container>
       <Wrapper>
