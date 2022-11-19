@@ -8,8 +8,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { cartForm, INIT_CART_LISTS } from '@store/cart';
 import { CartItem, CartTotalPriceWithCoupons } from '@components/Cart';
 import couponData from '@pages/api/coupon.json';
-import { ICoupons } from '@pages/cart/model';
+// import { ICoupons } from '@pages/cart/model';
 import { IItem } from '@pages/products/model';
+import getTotalPrice from '@utils/cart/getTotalPrice';
 
 const CartPage = () => {
   const fetchCouponList = JSON.parse(JSON.stringify(couponData));
@@ -18,6 +19,9 @@ const CartPage = () => {
 
   const router = useRouter();
   const dispatch = useDispatch();
+  const foundChckedItem = productsArr.filter((i: IItem) => i.checked);
+
+  const totalPriceObj = getTotalPrice(fetchCouponList, foundChckedItem);
 
   useEffect(() => {
     const arr = cartLists.map((i: IItem) => {
@@ -62,32 +66,11 @@ const CartPage = () => {
     [productsArr]
   );
 
-  const foundChckedItem = productsArr.filter((i: IItem) => i.checked);
-
   const availableCouponItem = (): boolean => {
     return foundChckedItem.some(
       (i: IItem) => i.availableCoupon === undefined || (i.availableCoupon === undefined && i.availableCoupon === false)
     );
   };
-
-  const getTotalPrice = useCallback(() => {
-    // 할인 금액과 총 주문 금액
-    const totalPriceObj = {
-      totalPrice: 0,
-      rateDiscountPrice: 0,
-      amountDiscountPrice: 0,
-    };
-    const discountRate = fetchCouponList.coupons.find((value: ICoupons) => value.type === 'rate')?.discountRate;
-    const discountAmount = fetchCouponList.coupons.find((value: ICoupons) => value.type === 'amount')?.discountAmount;
-    foundChckedItem.map((item: IItem) => {
-      totalPriceObj.totalPrice += item.price * item.quantity;
-      if (item.availableCoupon !== false) {
-        totalPriceObj.rateDiscountPrice += Math.floor((item.price * item.quantity * discountRate) / 100);
-        totalPriceObj.amountDiscountPrice = discountAmount;
-      }
-    });
-    return totalPriceObj;
-  }, [foundChckedItem]);
 
   const goToProducts = () => {
     router.push('/products');
@@ -126,7 +109,7 @@ const CartPage = () => {
             fetchCouponList={fetchCouponList}
             goToProducts={goToProducts}
             orderHandler={orderHandler}
-            getTotalPrice={getTotalPrice}
+            getTotalPrice={totalPriceObj}
             availableCouponItem={availableCouponItem}
           />
         </FlexCol>
