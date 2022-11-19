@@ -8,7 +8,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { cartForm, INIT_CART_LISTS } from '@store/cart';
 import { CartItem, CartTotalPriceWithCoupons } from '@components/Cart';
 import couponData from '@pages/api/coupon.json';
-// import { ICoupons } from '@pages/cart/model';
 import { IItem } from '@pages/products/model';
 import getTotalPrice from '@utils/cart/getTotalPrice';
 
