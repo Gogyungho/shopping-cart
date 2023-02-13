@@ -10,11 +10,18 @@ export const GlobalStyle = createGlobalStyle`
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
       Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   }
-  a {
-    color: inherit;
-    text-decoration: none;
+  button {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    -webkit-tap-highlight-color : transparent;
   }
   
+  a, a:visited {
+    text-decoration: none;
+    color: black;
+  }  
   * {
     box-sizing: border-box;
   }
@@ -31,4 +38,5 @@ export const GlobalStyle = createGlobalStyle`
   p {
     margin: 0;
   }
+
 `;
