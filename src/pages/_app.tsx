@@ -25,7 +25,7 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout): JSX.Element => {
   return (
     <>
       <Head>
-        <title>29CM FE Test</title>
+        <title>Guard</title>
       </Head>
       <ThemeProvider theme={{ ...theme, ...getMediaQuery }}>
         <RecoilRoot>

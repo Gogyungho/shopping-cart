@@ -4,30 +4,30 @@ import { theme, FlexCol, FlexBetween } from '@styles/theme';
 import { Text24B, Text18B } from '@components/Shared/Text';
 import { Button } from '@components/Shared/Button';
 import { useRouter } from 'next/router';
-import { useSelector, useDispatch } from 'react-redux';
-import { cartForm, INIT_CART_LISTS } from '@store/cart';
 import { CartItem, CartTotalPriceWithCoupons } from '@components/Cart';
 import couponData from '@pages/api/coupon.json';
 import { IItem } from '@pages/products/model';
 import getTotalPrice from '@utils/cart/getTotalPrice';
+import { useRecoilState, useResetRecoilState } from 'recoil';
+import { recoilCartState, CommonState } from '@states/recoilCartState';
 
 const CartPage = () => {
+  const [recoilCart] = useRecoilState(recoilCartState);
+  const resetList = useResetRecoilState(recoilCartState);
   const fetchCouponList = JSON.parse(JSON.stringify(couponData));
   const [productsArr, setProductsArr] = useState<IItem[]>([]);
-  const { cartLists } = useSelector(cartForm);
 
   const router = useRouter();
-  const dispatch = useDispatch();
   const foundChckedItem = productsArr.filter((i: IItem) => i.checked);
 
   const totalPriceObj = getTotalPrice(fetchCouponList, foundChckedItem);
 
   useEffect(() => {
-    const arr = cartLists.map((i: IItem) => {
+    const arr = recoilCart.cartList.map((i: IItem) => {
       return { ...i, quantity: 1, checked: false };
     });
     setProductsArr(arr);
-  }, [cartLists]);
+  }, [recoilCart.cartList]);
 
   const selectedCartItemHandler = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,25 +82,26 @@ const CartPage = () => {
     }
   };
 
-  const removeAllCartItems = () => {
-    dispatch(INIT_CART_LISTS());
-  };
-
   return (
     <Container>
       <FlexBetween padding="0 0 20px 0">
         <Text24B>장바구니</Text24B>
-        <Text18B onClick={removeAllCartItems} pointer>
+        <Text18B onClick={resetList} pointer>
           전체삭제
         </Text18B>
       </FlexBetween>
-      {cartLists.length > 0 ? (
+      {recoilCart.cartList.length > 0 ? (
         <FlexCol width="100%">
           <CartListWrapper>
             <Text18B padding="0 0 10px 20px">상품정보</Text18B>
-            {productsArr.map((item, idx) => {
+            {productsArr.map((item) => {
               return (
-                <CartItem key={idx} item={item} onChange={selectedCartItemHandler} quantityHandler={quantityHandler} />
+                <CartItem
+                  key={item.item_no}
+                  item={item}
+                  onChange={selectedCartItemHandler}
+                  quantityHandler={quantityHandler}
+                />
               );
             })}
           </CartListWrapper>
@@ -132,7 +133,7 @@ const CartPage = () => {
   );
 };
 
-const Container = styled.div`
+const Container = styled.main`
   width: 100%;
   margin-top: 30px;
   display: flex;

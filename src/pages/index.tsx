@@ -22,9 +22,9 @@ const Home: NextPageWithLayout = () => {
         <FiChevronRight size="25px" />
       </BtnWrapper>
       <ProductsWrapper>
-        {recommandItems.map((item: IItem, idx: number) => {
+        {recommandItems.map((item: IItem) => {
           return (
-            <Products key={idx}>
+            <Products key={item.item_no}>
               <img className="product-img" src={item.detail_image_url} alt="products image" />
               <Text14R padding="5px 0 0 0" textHideMultiline textHidelineNum={1}>
                 {item.item_name}

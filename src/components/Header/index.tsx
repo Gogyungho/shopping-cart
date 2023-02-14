@@ -7,9 +7,8 @@ import { AiOutlineUser } from 'react-icons/ai';
 import { FiHeart } from 'react-icons/fi';
 import Link from 'next/link';
 import { Text18B } from '@components/Shared/Text';
-import { useSelector } from 'react-redux';
-import { cartForm } from '@store/cart';
-
+import { useRecoilState } from 'recoil';
+import { recoilCartState } from '@states/recoilCartState';
 const MENU_TAP = [
   {
     name: 'PRODUCTS',
@@ -30,8 +29,8 @@ const MENU_TAP = [
 ];
 
 const Header = () => {
+  const [recoilCart] = useRecoilState(recoilCartState);
   const scroll = useScrollCheck();
-  const { cartLists } = useSelector(cartForm);
 
   return (
     <Container scroll={scroll}>
@@ -41,9 +40,9 @@ const Header = () => {
           <Wrapper>
             <Link href="/cart">
               <BsCart2 size={25} />
-              {cartLists.length > 0 && (
+              {recoilCart.cartList.length > 0 && (
                 <CountWrapper>
-                  <Count>{cartLists.length}</Count>
+                  <Count>{recoilCart.cartList.length}</Count>
                 </CountWrapper>
               )}
             </Link>
@@ -93,7 +92,7 @@ const Container = styled.div<{ scroll?: boolean }>`
   }};
 `;
 
-const TopWrapper = styled.section`
+const TopWrapper = styled.div`
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -141,7 +140,7 @@ const Count = styled.div`
   color: ${theme.white};
 `;
 
-const MenuTapWrapper = styled.section`
+const MenuTapWrapper = styled.div`
   display: flex;
   padding-top: 30px;
 `;

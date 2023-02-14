@@ -1,4 +1,3 @@
-
 ## Package Manager
 
 yarn 사용
@@ -12,6 +11,7 @@ yarn install
 ```bash
 yarn dev
 ```
+
 Open [http://localhost:3001](http://localhost:3001) with your browser to see the result.
 
 ## Directory Structure
@@ -26,6 +26,7 @@ Open [http://localhost:3001](http://localhost:3001) with your browser to see the
     ├── styles
     └── utils
 ```
+
 - components : 공용컴포넌트들을 작성하는 폴더
 - hooks : 공통 혹은 페이지별로 사용되는 커스텀 훅 폴더
 - model : 공통으로 사용되는 model 정의
@@ -38,11 +39,12 @@ Open [http://localhost:3001](http://localhost:3001) with your browser to see the
 
 - 메인 라이브러리 & 프레임워크: React, Next.js
 - 메인 언어 및 문법: Typescript, Javascript ES6+, JSX
-- 상태 관리: redux, redux-toolkit, redux-persist
+- 상태 관리: redux, redux-toolkit, redux-persist, recoil
 - UI Library: styled-components, bootstrap, react-icons
 - 기타: git, eslint, prettier, lodash
 
 ## prettier
+
 ```js
 {
   "trailingComma": "es5", // 객체, 배열을 사용할때 마지막줄 쉼표
