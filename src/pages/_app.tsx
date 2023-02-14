@@ -9,7 +9,8 @@ import { theme } from '@styles/theme';
 import Head from 'next/head';
 import DefaultLayout from '@components/Layout/Default';
 import 'bootstrap/dist/css/bootstrap.css';
-import { RecoilRoot } from 'recoil';
+import { PersistGate } from 'redux-persist/integration/react';
+import { useStore } from 'react-redux';
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -20,6 +21,7 @@ type AppPropsWithLayout = AppProps & {
 };
 
 const MyApp = ({ Component, pageProps }: AppPropsWithLayout): JSX.Element => {
+  const store: any = useStore();
   const getLayout = Component.getLayout ?? ((page) => <DefaultLayout>{page}</DefaultLayout>);
 
   return (
@@ -28,10 +30,8 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout): JSX.Element => {
         <title>29CM FE Test</title>
       </Head>
       <ThemeProvider theme={{ ...theme, ...getMediaQuery }}>
-        <RecoilRoot>
-          <GlobalStyle />
-          {getLayout(<Component {...pageProps} />)}
-        </RecoilRoot>
+        <GlobalStyle />
+        <PersistGate persistor={store.__persistor}>{getLayout(<Component {...pageProps} />)}</PersistGate>
       </ThemeProvider>
     </>
   );
